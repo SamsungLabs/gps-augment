@@ -1,5 +1,5 @@
 # Greedy Policy Search: <br/>A Simple Baseline for Learnable Test-Time Augmentation
-This repo contains the code to reproduce experiments from our paper on learning test-time augmentaiton policies.
+This repo contains the code to reproduce experiments from our paper on learning test-time augmentation policies.
 
 In this repo we reproduce experiments from our paper ["Greedy Policy Search: A Simple Baseline for Learnable Test-Time Augmentation"](https://arxiv.org/abs/2002.09103) (UAI 2020) by Dmitry Molchanov, Alexander Lyzhov, Yuliya Molchanova, Arsenii Ashukha, Dmitry Vetrov.
 
