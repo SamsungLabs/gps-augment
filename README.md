@@ -1,7 +1,7 @@
 # Greedy Policy Search: <br/>A Simple Baseline for Learnable Test-Time Augmentation
-This repo contains the code to reproduce experiments from the paper on learning test-time augmentaiton policies.
+This repo contains the code to reproduce experiments from our paper on learning test-time augmentaiton policies.
 
-[arXiv](https://arxiv.org/abs/2002.09103) / [bibtex](https://senya-ashukha.github.io/projects/gps_uai20/paper.txt)
+In this repo we reproduce experiments from our paper ["Greedy Policy Search: A Simple Baseline for Learnable Test-Time Augmentation"](https://arxiv.org/abs/2002.09103) (UAI 2020) by Dmitry Molchanov, Alexander Lyzhov, Yuliya Molchanova, Arsenii Ashukha, Dmitry Vetrov.
 
 <p align="center">
 <img width="80%" src="https://senya-ashukha.github.io/projects/gps_uai20/policy_eval.gif"/>
@@ -10,7 +10,7 @@ This repo contains the code to reproduce experiments from the paper on learning 
 Test-time data augmentation&mdash;averaging the predictions of a machine learning model across multiple augmented samples of data&mdash;is a widely used technique that improves the predictive performance. While many advanced learnable data augmentation techniques have emerged in recent years, they are focused on the training phase. Such techniques are not necessarily optimal for test-time augmentation and can be outperformed by a policy consisting of simple crops and flips. The primary goal of this paper is to demonstrate that test-time augmentation policies can be successfully learned too. We introduce *greedy policy search* (GPS), a simple but high-performing method for learning a policy of test-time augmentation. We demonstrate that augmentation policies learned with GPS achieve superior predictive performance on image classification problems, provide better in-domain uncertainty estimation, and improve the robustness to domain shift. 
 
 ## The logs with main results
-Logs and notebooks at [notebooks](notebooks) (unzip final-logs.zip), learned policies at [policies](policies) (CIFAR) and [imagenet/trained_pols](imagenet/trained_pols) (ImageNet).
+Logs and notebooks are at [notebooks](notebooks) (unzip final-logs.zip), learned policies are at [policies](policies) (CIFAR) and [imagenet/trained_pols](imagenet/trained_pols) (ImageNet).
 
 |Model | Central crop | Crop+flip | GPS |
 |-------------|---------:|-------------:|-------------:|
@@ -51,13 +51,13 @@ ipython -- get_predictions_randaugment.py --dataset=CIFAR10 --data_path ~/data -
 ipython -- get_predictions_randaugment.py --dataset=CIFAR10 --data_path ~/data --models ~/models/CIFAR10-VGG16BN-stratvalid.pt --fname Preds --N 0 --M 0 --log_dir validpreds --num_tta 1 --fix_sign --true_m0 --verbose --no_tta --valid
 ```
 
-### Finding a policy
+### Finding a policy with GPS
 Given a set of validation predictions, one can find the policy using the greedy policy search procedure using [`policy-search.py`](policy-search.py).
 ```(bash)
 ipython -- policy-search.py --predictions_dir validpreds/ --output CIFAR10-VGG16BN.npz
 ```
 
-### Evaluating a policy
+### Evaluating the found policy
 The found policy can be evaluated using [`get_predictions_randaugment.py`](get_predictions_randaugment.py).
 ```(bash)
 ipython -- get_predictions_randaugment.py --dataset=CIFAR10 --data_path ~/data --models ~/models/CIFAR10-VGG16BN-randaugment.pt --fname Preds --log_dir logs --num_tta 100 --fix_sign --true_m0 --verbose --silent --policy CIFAR10-VGG16BN.npz
@@ -65,15 +65,15 @@ ipython -- get_predictions_randaugment.py --dataset=CIFAR10 --data_path ~/data -
 
 ### Evaluating other methods
 [`get_predictions_randaugment.py`](get_predictions_randaugment.py) can also be used to evaluate other baselines.
-For example, in order to evaluate Deep ensembles, just supply the `--models` argument with a list of models.
+For example, in order to evaluate Deep Ensembles, just supply the `--models` argument with a list of models.
 Different augmentations can be obtained by varying the parameters `--N` and `--M` of RandAugment, and flag `--no_tta` disables test-time augmentation.
 See the list of the arguments of [`get_predictions_randaugment.py`](get_predictions_randaugment.py) for further details.
 
-## ImageNet 
+## Experiments on ImageNet 
 
-### Prepare a pool of policies 
+### Preparing a pool of policies 
 
-`--mode` states for augmentation mode:
+`--mode` stands for augmentation mode:
 - `cc`: rescale and central crop (no augmentation is used)
 - `cf`: conventional scale/crop/flip augmentation 
 - `ra`: RandAugment with parameters N and M 
@@ -97,12 +97,12 @@ ipython3 -- imagenet/get_preds_randaug_imagenet.py \
 --data_path ~/imagenet/raw-data --num_workers 10
 ```
 
-### Find a policy (GPS)
-`--select_by` states for metric that will be optimized by the algorithm:
+### Finding a policy with GPS
+`--select_by` states for metric that is optimized by the algorithm:
 - `ll`: calibrated log-likelihood (cLL)
 - `acc`: accuracy
 
-cLL works better than conventional log-likelihood, to use conventional LL change `temp_scale` to `False`.
+cLL works better than conventional log-likelihood, to use conventional LL set `temp_scale` to `False`.
 
 ```(bash)
 ipython -- imagenet/select_imagenet.py \
@@ -110,7 +110,7 @@ ipython -- imagenet/select_imagenet.py \
 --num_workers 20 --logits_dir ./logits
 ```
 
-### Evaluate a trained policy
+### Evaluating the found policy
 ```(bash)
 ipython -- imagenet/get_preds_randaug_imagenet.py \
 --use_val --report_ens --num_samples 5 --fix_sign \
@@ -120,7 +120,7 @@ ipython -- imagenet/get_preds_randaug_imagenet.py \
 
 ## Out-of-domain uncertainty
 
-### CIFAR
+### CIFARs
 Folder `CIFAR-C` should contain folders `CIFAR-10-C`, `CIFAR-100-C`.
 ``` (bash)
 ipython -- get_predictions_randaugment_ood.py --num_tta 100 \
@@ -130,7 +130,7 @@ ipython -- get_predictions_randaugment_ood.py --num_tta 100 \
 ```
 
 ### ImageNet
-`--corruptions` are indices of corruptions to evaluate policy on, for full list check `ood_transforms` in https://github.com/da-molchanov/advanced-tta/blob/master/imagenet/utils_imagenet.py
+`--corruptions` are indices of corruptions to evaluate policy on, check `ood_transforms` in https://github.com/da-molchanov/advanced-tta/blob/master/imagenet/utils_imagenet.py for the full list.
 ``` (bash)
 ipython -- imagenet/get_preds_randaug_imagenet_ood.py \
 --use_val --report_ens --num_tta 20 --fix_sign --model resnet50 \
@@ -141,7 +141,7 @@ ipython -- imagenet/get_preds_randaug_imagenet_ood.py \
 
 ## Our modifications to RandAugment
 We have modified the original RandAugment training procedure to achieve better performance.
-Most improtantly, the [original implementation](https://github.com/tensorflow/tpu/blob/master/models/official/efficientnet/autoaugment.py) of RandAugment does not keep the semantics of the magnitude parameter `M`.
+Most importantly, the [original implementation](https://github.com/tensorflow/tpu/blob/master/models/official/efficientnet/autoaugment.py) of RandAugment does not keep the semantics of the magnitude parameter `M`.
 The effective magnitude of some transformations decreases in `M` or has some other non-monotonic dependency on `M` (see e.g. a [related issue](https://github.com/tensorflow/tpu/issues/614)).
 We have modified the mapping from the magnitude parameter `M` to the actual transformations such that larger `M` would mean a larger augmentation intensity for all transformations, with `M=0` generally corresponding to no additional augmentations (with the exception of an occasional `AutoContrast` which does not have a magnitude).
 For bidirectional transformations like `Brightness` or `Sharpness` the direction of the augmentation (e.g. make the image darker or brighter) is chosen at random (one can override it by setting `randomize_sign=False` in [`utils/randaugment.py`](utils/randaugment.py)).
@@ -150,7 +150,7 @@ We have also found that using mirror padding for geometric transformations like 
 Also, longer training is crucial for learning with large-magnitude augmentations (we train for 2000 epochs with `N=3` and `M=45`).
 We have also removed the `Invert` and `Equalize` transforms for CIFAR models since they did not provide a significant improvement on a validation set.
 
-These modification allowed us to significantly improve the perfromance of WideResNet28x10 on CIFAR-100:
+These modifications allowed us to significantly improve the perfromance of WideResNet28x10 on CIFAR-100:
 |Model | CIFAR-10 | CIFAR-100 |
 |-------------|---------:|-------------:|
 |WideResNet28x10 + RandAugment (original)         | 97.3 | 83.3 |
