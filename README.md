@@ -8,7 +8,7 @@ In this repo we reproduce experiments from our paper ["Greedy Policy Search: A S
 
 Test-time data augmentation&mdash;averaging the predictions of a machine learning model across multiple augmented samples of data&mdash;is a widely used technique that improves the predictive performance. While many advanced learnable data augmentation techniques have emerged in recent years, they are focused on the training phase. Such techniques are not necessarily optimal for test-time augmentation and can be outperformed by a policy consisting of simple crops and flips. The primary goal of this paper is to demonstrate that test-time augmentation policies can be successfully learned too. We introduce *greedy policy search* (GPS), a simple but high-performing method for learning a policy of test-time augmentation. We demonstrate that augmentation policies learned with GPS achieve superior predictive performance on image classification problems, provide better in-domain uncertainty estimation, and improve the robustness to domain shift. 
 
-## The logs with main results
+## Logs for the main results
 Logs and notebooks are at [notebooks](notebooks) (unzip final-logs.zip), learned policies are at [policies](policies) (CIFAR) and [imagenet/trained_pols](imagenet/trained_pols) (ImageNet).
 
 |Model | Central crop | Crop+flip | GPS |
