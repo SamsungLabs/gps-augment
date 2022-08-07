@@ -1,3 +1,6 @@
+# TL;DR
+train -> get_pred -> policy_search -> get_pred w/ found policy
+
 # Learnable test-time augmentation
 
 In this repo we reproduce experiments from our paper ["Greedy Policy Search: A Simple Baseline for Learnable Test-Time Augmentation"](https://arxiv.org/abs/2002.09103) (UAI 2020) by Dmitry Molchanov, Alexander Lyzhov, Yuliya Molchanova, Arsenii Ashukha, Dmitry Vetrov.
