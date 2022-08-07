@@ -70,6 +70,7 @@ if args.randaugment:
 else:
     print('Using vanilla augmentation!')
 
+# Datasets 
 train_set = ds(path, train=True, download=True, transform=model_cfg.transform_train)
 
 train_idx = np.array(list(range(len(train_set.data))))
@@ -92,6 +93,8 @@ valid_set.train = False
 
 test_set = ds(path, train=False, download=True, transform=model_cfg.transform_test)
 tta_set = ds(path, train=False, download=True, transform=model_cfg.transform_train)
+
+# Dataloaders
 loaders = {
     'train': torch.utils.data.DataLoader(
         train_set,
@@ -157,6 +160,7 @@ optimizer = torch.optim.SGD(
     weight_decay=args.wd
 )
 
+# Training
 start_epoch = 0
 if args.resume is not None:
     print('Resume training from %s' % args.resume)
