@@ -51,7 +51,7 @@ def get_parser_ens():
     parser.add_argument(
         '--batch_size', type=int, default=256, metavar='N', help='input batch size (default: 256)')
     parser.add_argument(
-        '--num_workers', type=int, default=4, metavar='N', help='number of workers (default: 4)')
+        '--num_workers', type=int, default=0, metavar='N', help='number of workers (default: 0)')
     parser.add_argument(
         '--N', type=int, default=3, metavar='N', help='number of randaugmentations')
     parser.add_argument(
